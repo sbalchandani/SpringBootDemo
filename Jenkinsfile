@@ -3,6 +3,7 @@ pipeline {
     tools {
         maven 'Maven 3.2.1'
         jdk 'jdk8'
+        docker 'myDocker'
     }
     stages {
         stage ('Initialize') {
@@ -19,5 +20,6 @@ pipeline {
                 sh 'mvn install -Dmaven.test.skip=true'
             }
         }
+
     }
 }
