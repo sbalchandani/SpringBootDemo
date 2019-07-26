@@ -27,7 +27,7 @@
 def CONTAINER_NAME="my-pipeline"
 def CONTAINER_TAG="latest"
 def DOCKER_HUB_USER="saileshdb"
-def HTTP_PORT="8090"
+def HTTP_PORT="8099"
 
 node {
 
