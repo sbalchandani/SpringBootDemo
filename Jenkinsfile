@@ -31,32 +31,34 @@ def HTTP_PORT="8090"
 
 pipeline {
 
-	stage ('Initialize') {
-		def dockerHome = tool 'myDocker'
-		def mavenHome = tool 'myMaven'
-		env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
-	}
+	stages {
+        stage ('Initialize') {
+            def dockerHome = tool 'myDocker'
+            def mavenHome = tool 'myMaven'
+            env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
+        }
 
-	stage ('Build') {
-		sh 'mvn clean install'
-	}
+        stage ('Build') {
+            sh 'mvn clean install'
+        }
 
-	stage ('Image Prune') {
-		imagePrune(CONTAINER_NAME)
-	}
+        stage ('Image Prune') {
+            imagePrune(CONTAINER_NAME)
+        }
 
-	stage ('Image Build') {
-		imageBuild(CONTAINER_NAME, CONTAINER_TAG)
-	}
+        stage ('Image Build') {
+            imageBuild(CONTAINER_NAME, CONTAINER_TAG)
+        }
 
-	stage('Push to Docker Registry') {
-		withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
-		pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
-	}
+        stage('Push to Docker Registry') {
+            withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+            pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
+        }
 
-	stage('Run App'){
-		runApp(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER, HTTP_PORT)
-	}
+        stage('Run App'){
+            runApp(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER, HTTP_PORT)
+        }
+    }
 }
 
 def imagePrune(containerName){
