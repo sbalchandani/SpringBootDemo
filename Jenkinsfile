@@ -38,6 +38,10 @@ node {
 		echo "PATH = ${env.PATH}"
 	}
 
+	stage ('Checkout') {
+	    checkout scm
+	}
+
 	stage ('Build') {
 		sh 'mvn clean install'
 	}
