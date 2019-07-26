@@ -28,6 +28,7 @@ def CONTAINER_NAME="my-pipeline"
 def CONTAINER_TAG="latest"
 def DOCKER_HUB_USER="saileshdb"
 def HTTP_PORT="8099"
+def PASSWORD="Nby8mSzCH9zu5tm"
 
 node {
 
@@ -55,8 +56,8 @@ node {
 	}
 
 	stage('Push to Docker Registry') {
-		withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
-		pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
+		withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_HUB_USER', passwordVariable: 'PASSWORD')])
+		pushToImage(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER, PASSWORD)
 	}
 
 	stage('Run App'){
