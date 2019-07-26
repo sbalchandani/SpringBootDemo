@@ -32,9 +32,9 @@ def HTTP_PORT=“8090”
 pipeline {
 
 	stage (‘Initialize’) {
-		def dockerHome = tool ‘myDocker’
-		def mavenHome = tool ‘myMaven’
-		env.PATH = “${dockerHome}/bin:${mavenHome}/bin:${env.PATH}
+		def dockerHome = tool 'myDocker'
+		def mavenHome = tool 'myMaven'
+		env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
 	}
 
 	stage (‘Build’) {
