@@ -24,32 +24,32 @@
     }
 }*/
 
-def CONTAINER_NAME=“my-pipeline”
-def CONTAINER_TAG=“latest”
-def DOCKER_HUB_USER=“saileshdb”
-def HTTP_PORT=“8090”
+def CONTAINER_NAME="my-pipeline"
+def CONTAINER_TAG="latest"
+def DOCKER_HUB_USER="saileshdb"
+def HTTP_PORT="8090"
 
 pipeline {
 
-	stage (‘Initialize’) {
+	stage ('Initialize') {
 		def dockerHome = tool 'myDocker'
 		def mavenHome = tool 'myMaven'
 		env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
 	}
 
-	stage (‘Build’) {
-		sh ‘mvn clean install’
+	stage ('Build') {
+		sh 'mvn clean install'
 	}
 
-	stage (‘Image Prune’) {
+	stage ('Image Prune') {
 		imagePrune(CONTAINER_NAME)
 	}
 
-	stage (‘Image Build’) {
+	stage ('Image Build') {
 		imageBuild(CONTAINER_NAME, CONTAINER_TAG)
 	}
 
-	stage(‘Push to Docker Registry’) {
+	stage('Push to Docker Registry') {
 		withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD’)])
 		pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
 	}
